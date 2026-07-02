@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     # Anthropic
     anthropic_api_key: str = ""
-    model: str = "claude-opus-4-8"
+    model: str = "claude-haiku-4-5-20251001"  # economical default; override with LUMEN_MODEL
     max_tokens: int = 1024
 
     # Retrieval
