@@ -21,6 +21,22 @@ passages they came from — so you can trust them.
 
 ---
 
+## Preview
+
+<div align="center">
+
+<img src="docs/preview.svg" alt="Lumen — streaming, cited answer over indexed documents" width="820" />
+
+_Retrieve the most relevant passages, then stream a grounded answer from Claude — every
+claim cited back to its source._
+
+</div>
+
+<!-- To showcase the live streaming, record a short screen capture and drop it in as
+     docs/demo.gif, then swap the image above for: ![Lumen demo](docs/demo.gif) -->
+
+---
+
 ## Why this project
 
 Retrieval-augmented generation is the dominant pattern for putting LLMs to work on
