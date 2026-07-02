@@ -37,7 +37,9 @@ export async function streamChat(
   while (true) {
     const { value, done } = await reader.read();
     if (done) break;
-    buffer += value;
+    // Normalize CRLF → LF: sse-starlette separates frames with `\r\n\r\n`.
+    // Stripping CR (rather than replacing `\r\n`) is robust to a split across reads.
+    buffer += value.replace(/\r/g, "");
 
     // Dispatch every complete frame (terminated by a blank line).
     let sep: number;
