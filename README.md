@@ -55,9 +55,10 @@ an interface so it can be swapped, and tests + CI.
   maps to the retrieved passage it came from. Hover a citation to see the source snippet.
 - **⚡ Real-time streaming.** Answers stream token-by-token from Claude over Server-Sent
   Events — no waiting for the full response.
-- **🔍 Lexical retrieval (BM25).** Fast, dependency-light, and fully offline — no
-  embedding-model downloads. The retriever sits behind an interface, so swapping in vector
-  search is a one-file change.
+- **🔍 Pluggable retrieval.** Ships with three interchangeable strategies behind one
+  interface: **BM25** (default — lexical, offline, zero downloads), **semantic** (dense
+  embeddings, matches by meaning), and **hybrid** (Reciprocal Rank Fusion of both). Switch
+  with one env var.
 - **🧯 Hallucination guardrails.** The model is instructed to answer *only* from the
   supplied sources and to say so when the documents don't cover a question.
 - **🧱 Typed end-to-end.** Pydantic v2 on the backend, TypeScript + Zod-style contracts on
@@ -98,7 +99,7 @@ an interface so it can be swapped, and tests + CI.
 | ------------ | ------------------------------------------------------------------------ |
 | Backend      | FastAPI · Pydantic v2 · `pydantic-settings` · `sse-starlette`            |
 | LLM          | Anthropic Claude (`claude-opus-4-8` by default) via the official SDK     |
-| Retrieval    | `rank-bm25` lexical search over paragraph-aware chunks                    |
+| Retrieval    | `rank-bm25` lexical · optional `fastembed` semantic/hybrid (RRF)          |
 | Frontend     | React 19 · Vite 6 · TypeScript · Tailwind v4 · TanStack Query            |
 | Tooling      | Ruff · Pytest · GitHub Actions · Docker Compose                          |
 
@@ -196,9 +197,11 @@ lumen/
 
 ## Design notes
 
-- **Retrieval behind an interface.** `BM25Retriever` implements a small `rebuild` / `search`
-  surface. BM25 keeps the demo offline and instant; swapping in embeddings + a vector index
-  (e.g. pgvector or FAISS) means reimplementing that one class — the routes never change.
+- **Retrieval behind an interface.** All strategies implement one small `rebuild` / `search`
+  `Retriever` protocol, so the routes and store never change. BM25 keeps the default offline
+  and instant; `semantic` and `hybrid` add embedding-based matching (`fastembed`, ONNX/CPU,
+  no torch) and load the model lazily only when selected. Set `LUMEN_RETRIEVER=hybrid` after
+  `pip install ".[semantic]"`.
 - **Grounding over recall.** The system prompt forbids outside knowledge and requires
   citations. On a tiny corpus BM25's IDF term can collapse to zero, so the retriever falls
   back to raw term-overlap ranking — a small but real robustness fix.

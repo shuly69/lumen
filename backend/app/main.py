@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
+from .retrieval import build_retriever
 from .routes import chat, documents
 from .schemas import HealthResponse
 from .store import DocumentStore
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
     app.state.store = DocumentStore(
         chunk_size=settings.chunk_size,
         chunk_overlap=settings.chunk_overlap,
+        retriever=build_retriever(settings),
     )
     yield
 

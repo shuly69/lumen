@@ -12,7 +12,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
-from .retrieval import BM25Retriever, Chunk, ScoredChunk, chunk_text
+from .retrieval import BM25Retriever, Chunk, Retriever, ScoredChunk, chunk_text
 
 
 @dataclass
@@ -25,11 +25,17 @@ class Document:
 
 
 class DocumentStore:
-    def __init__(self, *, chunk_size: int, chunk_overlap: int) -> None:
+    def __init__(
+        self,
+        *,
+        chunk_size: int,
+        chunk_overlap: int,
+        retriever: Retriever | None = None,
+    ) -> None:
         self._chunk_size = chunk_size
         self._chunk_overlap = chunk_overlap
         self._docs: dict[str, Document] = {}
-        self._retriever = BM25Retriever()
+        self._retriever: Retriever = retriever or BM25Retriever()
         self._lock = threading.Lock()
 
     def add(self, *, title: str, content: str) -> Document:
