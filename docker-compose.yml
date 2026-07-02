@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      LUMEN_ANTHROPIC_API_KEY: ${LUMEN_ANTHROPIC_API_KEY:-}
+      LUMEN_MODEL: ${LUMEN_MODEL:-claude-opus-4-8}
+    expose:
+      - "8000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
