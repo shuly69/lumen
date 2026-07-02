@@ -25,15 +25,14 @@ passages they came from — so you can trust them.
 
 <div align="center">
 
-<img src="docs/preview.svg" alt="Lumen — streaming, cited answer over indexed documents" width="820" />
+<img src="docs/demo.svg" alt="Lumen streaming a grounded, cited answer" width="860" />
 
-_Retrieve the most relevant passages, then stream a grounded answer from Claude — every
-claim cited back to its source._
+_The answer streams in token-by-token, then cites the exact source it was grounded in._
 
 </div>
 
-<!-- To showcase the live streaming, record a short screen capture and drop it in as
-     docs/demo.gif, then swap the image above for: ![Lumen demo](docs/demo.gif) -->
+<!-- The animation above is a self-contained SVG. For a real screen capture, record the
+     running app (e.g. with ScreenToGif), save it as docs/demo.gif, and swap the src. -->
 
 ---
 
